@@ -8,14 +8,13 @@ document.body.innerHTML = `
 
 let counter: number = 0;
 
-const button = document.createElement('button');
+const button = document.createElement("button");
 button.id = "increment";
 button.textContent = "🔥";
 
-
-const counterElement = document.createElement('span');
+const counterElement = document.createElement("p");
 counterElement.id = "counter";
-counterElement.textContent = counter.toString();
+counterElement.textContent = `You have ${counter} of fires`;
 
 document.body.appendChild(button);
 document.body.appendChild(counterElement);
@@ -23,6 +22,6 @@ document.body.appendChild(counterElement);
 button.addEventListener("click", () => {
   // This looks like to a good place to add some logic!
   counter++;
-  counterElement.textContent = counter.toString();
+  counterElement.textContent = `You have ${counter} of fires`;
   console.log("I have these thingies:", button, counterElement, counter);
 });
