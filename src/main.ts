@@ -4,6 +4,10 @@ import "./style.css";
 document.body.innerHTML = `
   <h1>CMPM 121 Project</h1>
   <p>Example image asset: <img src="${exampleIconUrl}" class="icon" /></p>
-  <p>Counter: <span id="counter">0</span></p>
-  <button id="increment">Click Me!</button>
 `;
+
+const button = document.createElement('button');
+
+button.textContent = 'Launch 🔥';
+
+document.body.appendChild(button);
