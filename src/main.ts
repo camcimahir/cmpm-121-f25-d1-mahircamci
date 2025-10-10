@@ -6,8 +6,23 @@ document.body.innerHTML = `
   <p>Example image asset: <img src="${exampleIconUrl}" class="icon" /></p>
 `;
 
-const button = document.createElement('button');
+let counter: number = 0;
 
-button.textContent = 'Launch 🔥';
+const button = document.createElement('button');
+button.id = "increment";
+button.textContent = "🔥";
+
+
+const counterElement = document.createElement('span');
+counterElement.id = "counter";
+counterElement.textContent = counter.toString();
 
 document.body.appendChild(button);
+document.body.appendChild(counterElement);
+
+button.addEventListener("click", () => {
+  // This looks like to a good place to add some logic!
+  counter++;
+  counterElement.textContent = counter.toString();
+  console.log("I have these thingies:", button, counterElement, counter);
+});
