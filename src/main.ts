@@ -3,26 +3,42 @@ import "./style.css";
 
 document.body.innerHTML = `
   <h1>CMPM 121 Project</h1>
-  <p>Example image asset: <img src="${exampleIconUrl}" class="icon" /></p>
+  <!-- <p>Example image asset: <img src="${exampleIconUrl}" class="icon" /></p>-->
 `;
 
 let counter: number = 0;
 let lastTimestamp: number = 0;
 let growthRate: number = 0;
 const maxGrowthRate: number = 10;
-const UPGRADE_COST: number = 10;
+const UPGRADE_COSTA: number = 10;
+const UPGRADE_COSTB: number = 100;
+const UPGRADE_COSTC: number = 1000;
 
 //the button
 const button = document.createElement("button");
 button.id = "increment";
 button.textContent = "🔥";
 
-//upgrade button
-const upgradeButton = document.createElement("button");
-upgradeButton.id = "upgrade";
-upgradeButton.textContent =
-  `Buy flamethrower (+1/s)🔥 - Cost: ${UPGRADE_COST} fires`;
-upgradeButton.disabled = true;
+//upgrade button A
+const upgradeButtonA = document.createElement("button");
+upgradeButtonA.id = "upgradeA";
+upgradeButtonA.textContent =
+  `Buy flamethrower (+0.1/s)🔥 - Cost: ${UPGRADE_COSTA} fires`;
+upgradeButtonA.disabled = true;
+
+//upgrade button B
+const upgradeButtonB = document.createElement("button");
+upgradeButtonB.id = "upgradeB";
+upgradeButtonB.textContent =
+  `Buy flamethrower (+2/s)🔥 - Cost: ${UPGRADE_COSTB} fires`;
+upgradeButtonB.disabled = true;
+
+//upgrade button C
+const upgradeButtonC = document.createElement("button");
+upgradeButtonC.id = "upgradeC";
+upgradeButtonC.textContent =
+  `Buy flamethrower (+50/s)🔥 - Cost: ${UPGRADE_COSTC} fires`;
+upgradeButtonC.disabled = true;
 
 //display the growth rate
 const growthRateDisplay = document.createElement("p");
@@ -37,14 +53,19 @@ counterElement.textContent = `You have ${counter.toFixed(3)} of fires`;
 document.body.appendChild(button);
 document.body.appendChild(growthRateDisplay);
 document.body.appendChild(counterElement);
-document.body.appendChild(upgradeButton);
+document.body.appendChild(upgradeButtonA);
+document.body.appendChild(upgradeButtonB);
+document.body.appendChild(upgradeButtonC);
 
 //updates the display
 const updateDisplay = () => {
   counterElement.textContent = `You have ${counter.toFixed(3)} of fires`;
-  growthRateDisplay.textContent =
-    `Current automatic rate level is ${growthRate}`;
-  upgradeButton.disabled = counter < UPGRADE_COST ||
+  growthRateDisplay.textContent = `Growth Rate: ${growthRate.toFixed(2)} 🔥/s`;
+  upgradeButtonA.disabled = counter < UPGRADE_COSTA;
+  growthRate >= maxGrowthRate;
+  upgradeButtonB.disabled = counter < UPGRADE_COSTB ||
+    growthRate >= maxGrowthRate;
+  upgradeButtonC.disabled = counter < UPGRADE_COSTC ||
     growthRate >= maxGrowthRate;
 };
 
@@ -76,10 +97,26 @@ button.addEventListener("click", () => {
 });
 
 //upgrade button logic
-upgradeButton.addEventListener("click", () => {
-  if (counter >= UPGRADE_COST) {
-    counter -= UPGRADE_COST;
-    growthRate += 1;
+upgradeButtonA.addEventListener("click", () => {
+  if (counter >= UPGRADE_COSTA) {
+    counter -= UPGRADE_COSTA;
+    growthRate += 0.1;
+    updateDisplay();
+  }
+});
+
+upgradeButtonB.addEventListener("click", () => {
+  if (counter >= UPGRADE_COSTB) {
+    counter -= UPGRADE_COSTB;
+    growthRate += 2.0;
+    updateDisplay();
+  }
+});
+
+upgradeButtonC.addEventListener("click", () => {
+  if (counter >= UPGRADE_COSTC) {
+    counter -= UPGRADE_COSTC;
+    growthRate += 50.0;
     updateDisplay();
   }
 });
