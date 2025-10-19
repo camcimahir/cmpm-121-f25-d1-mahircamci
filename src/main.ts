@@ -10,9 +10,9 @@ let counter: number = 0;
 let lastTimestamp: number = 0;
 let growthRate: number = 0;
 const maxGrowthRate: number = 10;
-const UPGRADE_COSTA: number = 10;
-const UPGRADE_COSTB: number = 100;
-const UPGRADE_COSTC: number = 1000;
+let UPGRADE_COSTA: number = 10;
+let UPGRADE_COSTB: number = 100;
+let UPGRADE_COSTC: number = 1000;
 
 //the button
 const button = document.createElement("button");
@@ -61,6 +61,17 @@ document.body.appendChild(upgradeButtonC);
 const updateDisplay = () => {
   counterElement.textContent = `You have ${counter.toFixed(3)} of fires`;
   growthRateDisplay.textContent = `Growth Rate: ${growthRate.toFixed(2)} 🔥/s`;
+
+  upgradeButtonA.textContent = `Buy flamethrower (+0.1/s)🔥 - Cost: ${
+    UPGRADE_COSTA.toFixed(2)
+  } fires`;
+  upgradeButtonB.textContent = `Buy furnace (+2/s)🔥 - Cost: ${
+    UPGRADE_COSTB.toFixed(2)
+  } fires`;
+  upgradeButtonC.textContent = `Buy volcano (+50/s)🔥 - Cost: ${
+    UPGRADE_COSTC.toFixed(2)
+  } fires`;
+
   upgradeButtonA.disabled = counter < UPGRADE_COSTA;
   growthRate >= maxGrowthRate;
   upgradeButtonB.disabled = counter < UPGRADE_COSTB ||
@@ -100,6 +111,7 @@ button.addEventListener("click", () => {
 upgradeButtonA.addEventListener("click", () => {
   if (counter >= UPGRADE_COSTA) {
     counter -= UPGRADE_COSTA;
+    UPGRADE_COSTA = UPGRADE_COSTA * 1.15;
     growthRate += 0.1;
     updateDisplay();
   }
@@ -108,6 +120,7 @@ upgradeButtonA.addEventListener("click", () => {
 upgradeButtonB.addEventListener("click", () => {
   if (counter >= UPGRADE_COSTB) {
     counter -= UPGRADE_COSTB;
+    UPGRADE_COSTB = UPGRADE_COSTB * 1.15;
     growthRate += 2.0;
     updateDisplay();
   }
@@ -116,6 +129,7 @@ upgradeButtonB.addEventListener("click", () => {
 upgradeButtonC.addEventListener("click", () => {
   if (counter >= UPGRADE_COSTC) {
     counter -= UPGRADE_COSTC;
+    UPGRADE_COSTC = UPGRADE_COSTC * 1.15;
     growthRate += 50.0;
     updateDisplay();
   }
