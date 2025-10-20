@@ -2,7 +2,7 @@ import exampleIconUrl from "./noun-paperclip-7598668-00449F.png";
 import "./style.css";
 
 document.body.innerHTML = `
-  <h1>CMPM 121 Project</h1>
+  <h1>Ember Epoch </h1>
   <!-- <p>Example image asset: <img src="${exampleIconUrl}" class="icon" /></p>-->
 `;
 
@@ -65,10 +65,10 @@ const updateDisplay = () => {
   upgradeButtonA.textContent = `Buy flamethrower (+0.1/s)🔥 - Cost: ${
     UPGRADE_COSTA.toFixed(2)
   } fires`;
-  upgradeButtonB.textContent = `Buy furnace (+2/s)🔥 - Cost: ${
+  upgradeButtonB.textContent = `Activate a furnace (+2/s)🔥 - Cost: ${
     UPGRADE_COSTB.toFixed(2)
   } fires`;
-  upgradeButtonC.textContent = `Buy volcano (+50/s)🔥 - Cost: ${
+  upgradeButtonC.textContent = `Awaken a volcano (+50/s)🔥 - Cost: ${
     UPGRADE_COSTC.toFixed(2)
   } fires`;
 
