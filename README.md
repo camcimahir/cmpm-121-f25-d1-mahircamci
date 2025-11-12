@@ -1,3 +1,3 @@
 # CMPM 121 D1 Project
 
-This is the starting point for your CMPM 121 D1 project. The goal of this project is to create a simple web application using TypeScript, Vite, and modern web development practices. Students should make sure to remove _this_ content from their README.md file and replace it with their own project documentation.
+I got inspiration from benho612 adding the floating +1 on the screen when clicking the fire button. In my code it is in src/main.ts and the function spawnFloaty. Here is a link to his project repository: <https://github.com/benho612/CMPM1212-D1-Assignement>

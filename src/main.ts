@@ -166,8 +166,12 @@ const renderLoop = (timestamp: number) => {
 
 createUIElements();
 createUpgradeButtons();
-button.addEventListener("click", () => {
+button.addEventListener("click", (e: MouseEvent) => {
   gameState.counter++;
+  const x = e.clientX;
+  const y = e.clientY;
+
+  spawnFloaty("+1 🔥", x, y);
   renderGameUI();
 });
 requestAnimationFrame(renderLoop);
@@ -179,4 +183,15 @@ function handleUpgradePurchase(item: Item) {
     gameState.growthRate += item.production;
     renderGameUI();
   }
+}
+
+// taken inspiration from --> https://github.com/benho612/CMPM1212-D1-Assignement
+function spawnFloaty(text: string, x: number, y: number) {
+  const textElement = document.createElement("div");
+  textElement.className = "floaty";
+  textElement.textContent = text;
+  textElement.style.left = `${x}px`;
+  textElement.style.top = `${y}px`;
+  document.body.appendChild(textElement);
+  textElement.addEventListener("animationend", () => textElement.remove());
 }
