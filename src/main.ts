@@ -13,6 +13,20 @@ interface Item {
   buttonElement?: HTMLButtonElement;
 }
 
+// ------------------- GAME STATE -------------------
+interface GameState {
+  counter: number;
+  lastTimestamp: number;
+  growthRate: number;
+  //maxGrowthRate: number = 10; I removed the max growth rate you
+}
+
+const gameState: GameState = {
+  counter: 0,
+  lastTimestamp: 0,
+  growthRate: 0,
+};
+
 const availableItems: Item[] = [
   {
     name: "flintstone",
@@ -51,66 +65,70 @@ const availableItems: Item[] = [
   },
 ];
 
-let counter: number = 0;
-let lastTimestamp: number = 0;
-let growthRate: number = 0;
-//const maxGrowthRate: number = 10; I removed the max growth rate
+// ------------------- UI ELEMENTS -------------------
+let button!: HTMLButtonElement;
+let counterElement: HTMLParagraphElement;
+let growthRateDisplay: HTMLParagraphElement;
+let upgradeButtonsContainer: HTMLDivElement;
 
-//the button
-const button = document.createElement("button");
-button.id = "increment";
-button.textContent = "🔥";
+function createUIElements() {
+  //main button
+  button = document.createElement("button");
+  button.id = "increment";
+  button.textContent = "🔥";
 
-//display the growth rate
-const growthRateDisplay = document.createElement("p");
-growthRateDisplay.id = "rate";
+  //the counting number and text
+  counterElement = document.createElement("p");
+  counterElement.id = "counter";
+  counterElement.textContent = `You have ${
+    gameState.counter.toFixed(3)
+  } of fires`;
 
-//the counting number and text
-const counterElement = document.createElement("p");
-counterElement.id = "counter";
-counterElement.textContent = `You have ${counter.toFixed(3)} of fires`;
+  //growth rate
+  growthRateDisplay = document.createElement("p");
+  growthRateDisplay.id = "rate";
 
-const upgradeButtonsContainer = document.createElement("div");
+  upgradeButtonsContainer = document.createElement("div");
+  upgradeButtonsContainer.style.display = "flex";
+  upgradeButtonsContainer.style.flexDirection = "column"; //organize buttons vertically
+  upgradeButtonsContainer.style.gap = "8px"; //add space between them
 
-//organize buttons vertically
-upgradeButtonsContainer.style.display = "flex";
-upgradeButtonsContainer.style.flexDirection = "column";
-upgradeButtonsContainer.style.gap = "8px"; //add space between them
+  //display the elements
+  document.body.appendChild(button);
+  document.body.appendChild(growthRateDisplay);
+  document.body.appendChild(counterElement);
+  document.body.appendChild(upgradeButtonsContainer);
+}
 
-//display the elements
-document.body.appendChild(button);
-document.body.appendChild(growthRateDisplay);
-document.body.appendChild(counterElement);
-document.body.appendChild(upgradeButtonsContainer);
+function createUpgradeButtons() {
+  for (const item of availableItems) {
+    const upgradeButton = document.createElement("button");
+    upgradeButton.id = `buy-${item.name}`;
 
-for (const item of availableItems) {
-  const upgradeButton = document.createElement("button");
-  upgradeButton.id = `buy-${item.name}`;
+    upgradeButton.innerHTML =
+      `Buy **${item.name}** (+${item.production}/s)🔥<br>` +
+      `Price: ${item.currentPrice.toFixed(2)} fires<br>` +
+      `<span style="font-size: 0.9em; opacity: 0.7;">Description: ${item.description}</span>`;
+    upgradeButton.disabled = true;
 
-  upgradeButton.innerHTML =
-    `Buy **${item.name}** (+${item.production}/s)🔥<br>` +
-    `Price: ${item.currentPrice.toFixed(2)} fires<br>` +
-    `<span style="font-size: 0.9em; opacity: 0.7;">Description: ${item.description}</span>`;
-  upgradeButton.disabled = true;
+    item.buttonElement = upgradeButton;
 
-  item.buttonElement = upgradeButton;
+    upgradeButtonsContainer.appendChild(upgradeButton);
 
-  upgradeButtonsContainer.appendChild(upgradeButton);
-
-  upgradeButton.addEventListener("click", () => {
-    if (counter >= item.currentPrice) {
-      counter -= item.currentPrice;
-      item.currentPrice *= 1.15;
-      growthRate += item.production;
-      updateDisplay();
-    }
-  });
+    upgradeButton.addEventListener("click", () => {
+      handleUpgradePurchase(item);
+    });
+  }
 }
 
 //updates the display
 const updateDisplay = () => {
-  counterElement.textContent = `You have ${counter.toFixed(3)} of fires`;
-  growthRateDisplay.textContent = `Growth Rate: ${growthRate.toFixed(2)} 🔥/s`;
+  counterElement.textContent = `You have ${
+    gameState.counter.toFixed(3)
+  } of fires`;
+  growthRateDisplay.textContent = `Growth Rate: ${
+    gameState.growthRate.toFixed(2)
+  } 🔥/s`;
 
   for (const item of availableItems) {
     if (item.buttonElement) {
@@ -120,36 +138,44 @@ const updateDisplay = () => {
         `<span style="font-size: 0.9em; opacity: 0.7;">Description: ${item.description}</span>`;
 
       // Simplified disable logic using item data
-      item.buttonElement.disabled = counter < item.currentPrice;
+      item.buttonElement.disabled = gameState.counter < item.currentPrice;
     }
   }
 };
 
 const renderLoop = (timestamp: number) => {
   //initialize time stamp
-  if (lastTimestamp === 0) {
-    lastTimestamp = timestamp;
+  if (gameState.lastTimestamp === 0) {
+    gameState.lastTimestamp = timestamp;
   }
 
   //determine elapsed time for seconds
-  const deltaTimeMs = timestamp - lastTimestamp;
+  const deltaTimeMs = timestamp - gameState.lastTimestamp;
   const elapsedSeconds = deltaTimeMs / 1000;
 
-  const increaseAmount = elapsedSeconds * growthRate;
+  const increaseAmount = elapsedSeconds * gameState.growthRate;
 
-  counter += increaseAmount;
+  gameState.counter += increaseAmount;
   updateDisplay();
 
-  lastTimestamp = timestamp;
+  gameState.lastTimestamp = timestamp;
 
   requestAnimationFrame(renderLoop);
 };
 
-//every click runs the update counter
+createUIElements();
+createUpgradeButtons();
 button.addEventListener("click", () => {
-  counter++;
+  gameState.counter++;
   updateDisplay();
-  console.log("I have these thingies:", button, counterElement, counter);
 });
-
 requestAnimationFrame(renderLoop);
+
+function handleUpgradePurchase(item: Item) {
+  if (gameState.counter >= item.currentPrice) {
+    gameState.counter -= item.currentPrice;
+    item.currentPrice *= 1.15;
+    gameState.growthRate += item.production;
+    updateDisplay();
+  }
+}
