@@ -100,6 +100,7 @@ function createUIElements() {
   document.body.appendChild(upgradeButtonsContainer);
 }
 
+// ------------------- GAME FUNCTIONS -------------------
 function createUpgradeButtons() {
   for (const item of availableItems) {
     const upgradeButton = document.createElement("button");
@@ -122,7 +123,7 @@ function createUpgradeButtons() {
 }
 
 //updates the display
-const updateDisplay = () => {
+const renderGameUI = () => {
   counterElement.textContent = `You have ${
     gameState.counter.toFixed(3)
   } of fires`;
@@ -156,7 +157,7 @@ const renderLoop = (timestamp: number) => {
   const increaseAmount = elapsedSeconds * gameState.growthRate;
 
   gameState.counter += increaseAmount;
-  updateDisplay();
+  renderGameUI();
 
   gameState.lastTimestamp = timestamp;
 
@@ -167,7 +168,7 @@ createUIElements();
 createUpgradeButtons();
 button.addEventListener("click", () => {
   gameState.counter++;
-  updateDisplay();
+  renderGameUI();
 });
 requestAnimationFrame(renderLoop);
 
@@ -176,6 +177,6 @@ function handleUpgradePurchase(item: Item) {
     gameState.counter -= item.currentPrice;
     item.currentPrice *= 1.15;
     gameState.growthRate += item.production;
-    updateDisplay();
+    renderGameUI();
   }
 }
